@@ -16,19 +16,23 @@ import datetime
 # Full list of token names (must include all from all contributors)
 tokens = [
     # Identifiers, keywords, operators, etc.
-
+    
+    #Added by Leonardo Zambrano
     'PLUS', 'MINUS', 'TIMES', 'DIV', 'MOD', 'POT',
     'IDENTIFIER', 'EQUAL','STRING','LBRACKET', 'RBRACKET', 
-    'COMMA', 'SEMICOLON',
-    #Added by Leonardo Zambrano
-
+    'COMMA', 'SEMICOLON','NUMBER',
+    
+    #Added by Andres Zambrano
+    'EQUALS', 'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULT_ASSIGN', 'DIV_ASSIGN', 'MOD_ASSIGN',
+    'EQ', 'NEQ', 'STRICT_EQ', 'STRICT_NEQ',
+    'LT', 'GT', 'LE', 'GE',
+    'COLON', 'LBRACE', 'RBRACE','LPAREN', 'RPAREN',
+    'DOT','TRUE', 'FALSE'
 ]
 
 # Reserved words
 reserved = {
-    # 'if': 'IF', 'else': 'ELSE', ...
-
-
+    #Added by Leonardo Zambrano
     'number': 'NUMBER_TYPE',
     'string': 'STRING_TYPE',
     'boolean': 'BOOLEAN_TYPE',
@@ -39,7 +43,28 @@ reserved = {
     'let': 'LET',
     'var': 'VAR',
     
-    #Added by Leonardo Zambrano
+    #Added by Andres Zambrano
+    'if':'IF',
+    'else':'ELSE',
+    'for':'FOR',
+    'while':'WHILE',
+    'switch':'SWITCH',
+    'case':'CASE',
+    'break':'BREAK',
+    'continue':'CONTINUE',
+    'return':'RETURN',
+    'function':'FUNCTION',
+    'const':'CONST',
+    'class':'CLASS',
+    'new':'NEW',
+    'try':'TRY',
+    'catch':'CATCH',
+    'finally':'FINALLY',
+    'void':'VOID',
+    'any':'ANY',
+    'true': 'TRUE',
+    'false': 'FALSE',
+    
 }
 
 # Merge reserved into tokens list
@@ -48,6 +73,7 @@ tokens += list(reserved.values())
 # Token regex rules go here...
 # e.g., t_PLUS = r'\+'
 
+#Added by Leonardo Zambrano
 t_PLUS = r'\+'
 t_MINUS = r'-'
 t_TIMES = r'\*'
@@ -59,7 +85,29 @@ t_RBRACKET = r'\]'
 t_COMMA     = r','
 t_SEMICOLON = r';'
 t_EQUAL   = r'='
-#Added by Leonardo Zambrano
+
+#Added by Andres Zambrano
+t_EQUALS = r'='
+t_PLUS_ASSIGN = r'\+='
+t_MINUS_ASSIGN = r'-='
+t_MULT_ASSIGN = r'\*='
+t_DIV_ASSIGN = r'/='
+t_MOD_ASSIGN = r'%='
+t_EQ = r'=='
+t_NEQ = r'!='
+t_STRICT_EQ = r'==='
+t_STRICT_NEQ = r'!=='
+t_LT = r'<'
+t_GT = r'>'
+t_LE = r'<='
+t_GE = r'>='
+t_COLON = r':'
+t_LBRACE = r'\{'
+t_RBRACE = r'\}'
+t_ignore = ' \t\r'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
+t_DOT = r'\.'
 
 
 
@@ -75,8 +123,11 @@ def t_STRING(t):
     t.value = str(t.value)
     return t
 
+def t_NUMBER(t):
+    r'\d+(\.\d+)?'
+    t.value = float(t.value) if '.' in t.value else int(t.value)
+    return t
 
-t_ignore = ' \t\r'
 
 def t_newline(t):
     r'\n+'
