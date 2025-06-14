@@ -27,7 +27,7 @@ tokens = [
     'EQ', 'NEQ', 'STRICT_EQ', 'STRICT_NEQ',
     'LT', 'GT', 'LE', 'GE',
     'COLON', 'LBRACE', 'RBRACE','LPAREN', 'RPAREN',
-    'DOT','TRUE', 'FALSE'
+    'DOT'
 ]
 
 # Reserved words
