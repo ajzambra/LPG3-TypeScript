@@ -16,11 +16,30 @@ import datetime
 # Full list of token names (must include all from all contributors)
 tokens = [
     # Identifiers, keywords, operators, etc.
+
+    'PLUS', 'MINUS', 'TIMES', 'DIV', 'MOD', 'POT',
+    'IDENTIFIER', 'EQUAL','STRING','LBRACKET', 'RBRACKET', 
+    'COMMA', 'SEMICOLON',
+    #Added by Leonardo Zambrano
+
 ]
 
 # Reserved words
 reserved = {
     # 'if': 'IF', 'else': 'ELSE', ...
+
+
+    'number': 'NUMBER_TYPE',
+    'string': 'STRING_TYPE',
+    'boolean': 'BOOLEAN_TYPE',
+    'null': 'NULL_TYPE',
+    'undefined': 'UNDEFINED_TYPE',
+    'bigint': 'BIGINT_TYPE',
+    'symbol': 'SYMBOL_TYPE',
+    'let': 'LET',
+    'var': 'VAR',
+    
+    #Added by Leonardo Zambrano
 }
 
 # Merge reserved into tokens list
@@ -28,6 +47,34 @@ tokens += list(reserved.values())
 
 # Token regex rules go here...
 # e.g., t_PLUS = r'\+'
+
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_TIMES = r'\*'
+t_DIV = r'/'
+t_MOD = r'%'
+t_POT = r'\*\*'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
+t_COMMA     = r','
+t_SEMICOLON = r';'
+t_EQUAL   = r'='
+#Added by Leonardo Zambrano
+
+
+
+
+#Added by Leonardo Zambrano
+def t_IDENTIFIER(t):
+    r'[a-zA-Z_][a-zA-Z0-9_]*'
+    t.type = reserved.get(t.value, 'IDENTIFIER')
+    return t
+
+def t_STRING(t):
+    r'(\"([^\\\n"]|\\.)*\")|(\'([^\\\n\']|\\.)*\')'
+    t.value = str(t.value)
+    return t
+
 
 t_ignore = ' \t\r'
 
@@ -38,6 +85,17 @@ def t_newline(t):
 def t_error(t):
     print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
     t.lexer.skip(1)
+
+
+
+
+#Creating the lexer
+lexer = lex.lex()
+
+
+
+
+
 
 def run_lexer(file_path, username):
     lexer = lex.lex()
