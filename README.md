@@ -30,6 +30,7 @@ Coloca tu archivo .ts de prueba en la carpeta tests/.
 Ejecuta el siguiente comando desde la raíz del proyecto:
 
 python run_lexer.py tests/archivo.ts usuarioGit
+
 📌 Cambia:
 archivo.ts por el nombre del archivo que quieres analizar.
 usuarioGit por tu nombre o nombre de usuario de GitHub.
