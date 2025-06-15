@@ -27,7 +27,10 @@ tokens = [
     'EQ', 'NEQ', 'STRICT_EQ', 'STRICT_NEQ',
     'LT', 'GT', 'LE', 'GE',
     'COLON', 'LBRACE', 'RBRACE','LPAREN', 'RPAREN',
-    'DOT'
+    'DOT',
+    
+    #Added by Roberto Barrios:
+    'AND', 'OR', 'NOT','EXPORT', 'IMPORT', 'TYPE', 'ENUM', 'ARROW'
 ]
 
 # Reserved words
@@ -64,6 +67,12 @@ reserved = {
     'any':'ANY',
     'true': 'TRUE',
     'false': 'FALSE',
+    
+    #Added by Roberto Barrios
+    'export': 'EXPORT',
+    'import': 'IMPORT',
+    'type': 'TYPE',
+    'enum': 'ENUM',
     
 }
 
@@ -109,6 +118,11 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_DOT = r'\.'
 
+#Added by Roberto Barrios
+t_AND = r'&&'
+t_OR = r'\|\|'
+t_NOT = r'!'
+t_ARROW = r'=>'
 
 
 
@@ -138,7 +152,14 @@ def t_error(t):
     t.lexer.skip(1)
 
 
+#Added by Roberto Barrios
+def t_COMMENT(t):
+    r'//[^\n]*'
+    pass
 
+def t_MULTILINE_COMMENT(t):
+    r'/\*[\s\S]*?\*/'
+    pass
 
 #Creating the lexer
 lexer = lex.lex()
