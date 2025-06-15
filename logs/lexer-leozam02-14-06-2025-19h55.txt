@@ -74,11 +74,11 @@ LBRACKET([) at line 12
 RBRACKET(]) at line 12
 EQUAL(=) at line 12
 LBRACKET([) at line 12
-NUMBER(8.5) at line 12
+FLOAT(8.5) at line 12
 COMMA(,) at line 12
-NUMBER(9.0) at line 12
+FLOAT(9.0) at line 12
 COMMA(,) at line 12
-NUMBER(7.5) at line 12
+FLOAT(7.5) at line 12
 COMMA(,) at line 12
 NUMBER(10) at line 12
 RBRACKET(]) at line 12

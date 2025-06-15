@@ -20,7 +20,7 @@ tokens = [
     #Added by Leonardo Zambrano
     'PLUS', 'MINUS', 'TIMES', 'DIV', 'MOD', 'POT',
     'IDENTIFIER', 'EQUAL','STRING','LBRACKET', 'RBRACKET', 
-    'COMMA', 'SEMICOLON','NUMBER',
+    'COMMA', 'SEMICOLON','NUMBER', 'FLOAT',
     
     #Added by Andres Zambrano
     'EQUALS', 'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULT_ASSIGN', 'DIV_ASSIGN', 'MOD_ASSIGN',
@@ -45,7 +45,7 @@ reserved = {
     'symbol': 'SYMBOL_TYPE',
     'let': 'LET',
     'var': 'VAR',
-    
+
     #Added by Andres Zambrano
     'if':'IF',
     'else':'ELSE',
@@ -137,11 +137,15 @@ def t_STRING(t):
     t.value = str(t.value)
     return t
 
-def t_NUMBER(t):
-    r'\d+(\.\d+)?'
-    t.value = float(t.value) if '.' in t.value else int(t.value)
+def t_FLOAT(t):
+    r'\d+\.\d+'
+    t.value = float(t.value)
     return t
 
+def t_NUMBER(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
 
 def t_newline(t):
     r'\n+'
