@@ -30,7 +30,7 @@ tokens = [
     'DOT',
     
     #Added by Roberto Barrios:
-    'AND', 'OR', 'NOT','EXPORT', 'IMPORT', 'TYPE', 'ENUM', 'ARROW'
+    'AND', 'OR', 'NOT', 'ARROW'
 ]
 
 # Reserved words
