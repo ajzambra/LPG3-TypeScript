@@ -7,9 +7,9 @@ let suma: number = 0;
 
 //ALGORITMO PRINICIPAL
 function promedioNotas(notas: number[]): number {
-  // for (let a = 0; a < notas.length; a++) {
-	//    suma += notas[a];
-  //  }
+  for (let a = 0; a < notas.length; a++) {
+	    suma += notas[a];
+    }
  
   let promedio: number = suma / notas.length;
   return promedio;

@@ -57,14 +57,20 @@ def p_forEstructure(p):
     log_info("for structure")
 
 def p_for_init(p):
-    '''for_init : letAssignment
+    '''for_init : LET IDENTIFIER EQUAL expression
+                | LET IDENTIFIER COLON type EQUAL expression
                 | expression
                 | empty'''
     log_info("for init")
 
+
 def p_for_update(p):
     '''for_update : expression
-                | empty'''
+                  | expression PLUSPLUS
+                  | expression MINUSMINUS
+                  | PLUSPLUS expression
+                  | MINUSMINUS expression
+                  | empty'''
     log_info("for update")
 
 # ----------- Function and Parameter-------------
