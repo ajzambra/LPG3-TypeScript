@@ -1,10 +1,18 @@
+//Pequeña prueba de TypeScript
+ let edad: number = 25;
+ let edades: number[] = [21, 30, 25];
+
+let suma: number = 0;
+
+
+//ALGORITMO PRINICIPAL
 function promedioNotas(notas: number[]): number {
-  for (let i = 0; i < notas.length; i++) {
-	suma += notas[i];
-  }
+  // for (let a = 0; a < notas.length; a++) {
+	//    suma += notas[a];
+  //  }
  
-let promedio: number = suma / notas.length;
-      return promedio;
+  let promedio: number = suma / notas.length;
+  return promedio;
 }
  
 let estudiante = prompt("Ingrese el nombre del estudiante:");

@@ -20,7 +20,7 @@ tokens = [
     #Added by Leonardo Zambrano
     'PLUS', 'MINUS', 'TIMES', 'DIV', 'MOD', 'POT',
     'IDENTIFIER', 'EQUAL','STRING','LBRACKET', 'RBRACKET', 
-    'COMMA', 'SEMICOLON','NUMBER', 'FLOAT',
+    'COMMA', 'SEMICOLON','NUMBER', 'FLOAT', 'PLUSPLUS', 'MINUSMINUS',
     
     #Added by Andres Zambrano
     'EQUALS', 'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULT_ASSIGN', 'DIV_ASSIGN', 'MOD_ASSIGN',
@@ -115,7 +115,7 @@ t_EQUAL   = r'='
 
 #Added by Andres Zambrano
 t_EQUALS = r'='
-t_PLUS_ASSIGN = r'\+='
+t_PLUS_ASSIGN = r'\+\='
 t_MINUS_ASSIGN = r'-='
 t_MULT_ASSIGN = r'\*='
 t_DIV_ASSIGN = r'/='
@@ -135,6 +135,9 @@ t_ignore = ' \t\r'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_DOT = r'\.'
+t_PLUSPLUS = r'\+\+'
+t_MINUSMINUS = r'--'
+
 
 #Added by Roberto Barrios
 t_AND = r'&&'

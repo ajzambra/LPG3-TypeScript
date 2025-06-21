@@ -1,0 +1,4 @@
+Errores sintácticos encontrados:
+Línea 10: token inesperado 'i'
+Línea 10: token inesperado '++'
+Línea 16: token inesperado '}'
