@@ -74,6 +74,24 @@ reserved = {
     'type': 'TYPE',
     'enum': 'ENUM',
     
+
+    
+    'interface': 'INTERFACE',
+    'of': 'OF',
+    'as': 'AS',
+    'this': 'THIS',
+    'super': 'SUPER',
+    'console': 'CONSOLE',
+    'log': 'LOG',
+    'public': 'PUBLIC',
+    'private': 'PRIVATE',
+    'protected': 'PROTECTED',
+    'static': 'STATIC',
+    'default': 'DEFAULT',
+    'async': 'ASYNC',
+    'await': 'AWAIT',
+
+    
 }
 
 # Merge reserved into tokens list
