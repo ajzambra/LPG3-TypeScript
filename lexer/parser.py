@@ -88,6 +88,15 @@ def p_body_function(p):
     '''body_function : instruction_list'''
     log_info("function body")
 
+# ----------- Tuple-------------
+def p_type_tuple(p):
+    'type : LBRACKET type COMMA type RBRACKET'
+    log_info("tuple type")
+
+def p_expression_tuple(p):
+    'expression : LBRACKET expression COMMA expression RBRACKET'
+    log_info("tuple value")
+
 # ---------- TYPES -------------
 def p_type(p):
     '''type : NUMBER_TYPE
@@ -120,6 +129,7 @@ def p_expression(p):
                 | expression GT expression
                 | expression LE expression
                 | expression GE expression
+                | PROMPT LPAREN STRING RPAREN
                 | NOT expression
                 | LPAREN expression RPAREN
                 | expression DOT IDENTIFIER
@@ -128,7 +138,9 @@ def p_expression(p):
                 | NUMBER
                 | FLOAT
                 | STRING
-                | IDENTIFIER'''
+                | IDENTIFIER
+                | TRUE
+                | FALSE'''
     log_info("expression")
 
 def p_expression_increment(p):
@@ -160,7 +172,8 @@ def p_statement(p):
                 | expression SEMICOLON
                 | controlEstructure
                 | RETURN expression SEMICOLON
-                | forEstructure'''
+                | forEstructure
+                | varAssignment'''
     log_info("statement")
 
 def p_instruction_list(p):
@@ -182,6 +195,31 @@ def p_error(p):
         msg = "✘ Fin de archivo inesperado"
     print(msg)
     error_log.append(msg)
+
+
+
+# ----------- Andres Zambrano -------------
+    
+# ----------- While -------------
+def p_controlEstructure_while(p):
+    'controlEstructure : WHILE LPAREN expression RPAREN statement'
+    log_info("while structure")
+
+
+
+# ----------- Var - Const-------------
+def p_varAssignment(p):
+    'varAssignment : VAR IDENTIFIER COLON type EQUAL expression SEMICOLON'
+    log_info(f"varAssignment: {p[2]}")
+
+def p_varAssignment_no_type(p):
+    'varAssignment : VAR IDENTIFIER EQUAL expression SEMICOLON'
+    log_info(f"varAssignment (no type): {p[2]}")
+
+# ----------- Arrow Function -------------
+def p_arrow_function(p):
+    'function : CONST IDENTIFIER EQUAL LPAREN parameters RPAREN ARROW LBRACE body_function RBRACE SEMICOLON'
+    log_info(f"arrow function: {p[2]}")
 
 # ----------- Parser Execution -------------
 parser = yacc.yacc(start='program')
@@ -212,3 +250,6 @@ def run_parser(file_path, username):
                 log.write(f"{err}\n")
         else:
             log.write(" ---------------:D Análisis sintáctico completado sin errores. -----------------\n")
+
+    
+

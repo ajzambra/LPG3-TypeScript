@@ -23,7 +23,7 @@ tokens = [
     'COMMA', 'SEMICOLON','NUMBER', 'FLOAT', 'PLUSPLUS', 'MINUSMINUS',
     
     #Added by Andres Zambrano
-    'EQUALS', 'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULT_ASSIGN', 'DIV_ASSIGN', 'MOD_ASSIGN',
+    'PLUS_ASSIGN', 'MINUS_ASSIGN', 'MULT_ASSIGN', 'DIV_ASSIGN', 'MOD_ASSIGN',
     'EQ', 'NEQ', 'STRICT_EQ', 'STRICT_NEQ',
     'LT', 'GT', 'LE', 'GE',
     'COLON', 'LBRACE', 'RBRACE','LPAREN', 'RPAREN',
@@ -67,6 +67,8 @@ reserved = {
     'any':'ANY',
     'true': 'TRUE',
     'false': 'FALSE',
+
+    'prompt': 'PROMPT',
     
     #Added by Roberto Barrios
     'export': 'EXPORT',
@@ -114,7 +116,6 @@ t_SEMICOLON = r';'
 t_EQUAL   = r'='
 
 #Added by Andres Zambrano
-t_EQUALS = r'='
 t_PLUS_ASSIGN = r'\+\='
 t_MINUS_ASSIGN = r'-='
 t_MULT_ASSIGN = r'\*='
