@@ -20,6 +20,8 @@ def p_element(p):
     '''element : letAssignment
                | declaracion
                | function
+               | arrow_function
+               | async_function
                | constAssignment
                | enum_definition
                | controlEstructure
@@ -174,6 +176,8 @@ def p_statement(p):
                  | constAssignment
                  | declaracion
                  | function
+                 | arrow_function
+                 | async_function
                  | consolelog
                  | expression SEMICOLON
                  | controlEstructure
@@ -181,6 +185,7 @@ def p_statement(p):
                  | forEstructure
                  | class_definition'''
     log_info("statement")
+
 
 
 def p_instruction_list(p):
@@ -225,7 +230,7 @@ def p_varAssignment_no_type(p):
 
 # ----------- Arrow Function -------------
 def p_arrow_function(p):
-    'function : CONST IDENTIFIER EQUAL LPAREN parameters RPAREN ARROW LBRACE body_function RBRACE SEMICOLON'
+    'arrow_function : CONST IDENTIFIER EQUAL LPAREN parameters RPAREN ARROW LBRACE body_function RBRACE SEMICOLON'
     log_info(f"arrow function: {p[2]}")
 
 # ----------- Parser Execution -------------
@@ -320,8 +325,9 @@ def p_enum_members(p):
     
 # ----------- ASYNC function -------------
 def p_async_function(p):
-    'function : ASYNC FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
+    'async_function : ASYNC FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
     log_info(f"async function: {p[3]}")
+
 
 
 
