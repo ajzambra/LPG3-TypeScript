@@ -28,9 +28,17 @@ def p_element(p):
                | forEstructure
                | class_definition
                | statement
+               | interface
+               | assignment
                | expression SEMICOLON
                | consolelog'''
     log_info("element")
+
+
+def p_assignment(p):
+    'assignment : IDENTIFIER EQUAL expression SEMICOLON'
+    log_info(f"assignment to {p[1]}")
+
 
 
 # ----------- Declare Variable -------------
@@ -62,6 +70,10 @@ def p_forEstructure(p):
     '''forEstructure : FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN statement'''
     log_info("for structure")
 
+def p_for_of_structure(p):
+    'forEstructure : FOR LPAREN CONST IDENTIFIER OF IDENTIFIER RPAREN statement'
+    log_info("for...of structure")
+
 def p_for_init(p):
     '''for_init : LET IDENTIFIER EQUAL expression
                 | LET IDENTIFIER COLON type EQUAL expression
@@ -91,7 +103,8 @@ def p_parameters(p):
     log_info("parameters")
 
 def p_body_function(p):
-    '''body_function : instruction_list'''
+    '''body_function : instruction_list
+                    | empty'''
     log_info("function body")
 
 # ----------- Tuple-------------
@@ -307,6 +320,40 @@ def p_varAssignment_no_type(p):
 def p_arrow_function(p):
     'arrow_function : CONST IDENTIFIER EQUAL LPAREN parameters RPAREN ARROW LBRACE body_function RBRACE SEMICOLON'
     log_info(f"arrow function: {p[2]}")
+
+
+# ----------- INTERFACE Definition -------------
+
+def p_interface(p):
+    'interface : INTERFACE IDENTIFIER LBRACE interface_body RBRACE'
+    log_info(f"interface: {p[2]}")
+
+def p_interface_body(p):
+    '''interface_body : interface_body interface_property
+                      | interface_property
+                      | empty'''
+    log_info("interface body")
+
+def p_interface_property(p):
+    'interface_property : IDENTIFIER COLON type SEMICOLON'
+    log_info(f"property {p[1]} in interface")
+
+
+def p_expression_variables(p):
+    '''expression : LBRACE object_properties RBRACE'''
+    log_info("object with many variables")
+
+def p_object_properties(p):
+    '''object_properties : object_property
+                         | object_property COMMA object_properties
+                         | empty'''
+    log_info("object properties")
+
+def p_object_property(p):
+    '''object_property : IDENTIFIER COLON expression'''
+    log_info(f"object property: {p[1]}")
+
+
 
 # ----------- Parser Execution -------------
 parser = yacc.yacc(start='program')
