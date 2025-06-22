@@ -9,8 +9,12 @@ El sistema permite identificar tokens válidos (palabras clave, operadores, tipo
 ```text
 ├── lexer/                     <- Contiene el archivo principal del analizador léxico (lexer.py)
 │   └── lexer.py               <- Define los tokens, reglas léxicas y la función run_lexer()
+│   └── parser.py              <- Verificará que las expresiones y estructuras del código en TypeScript
+│                                  sigan las reglas gramaticales del lenguaje. run_parser()
 │
 ├── run_lexer.py              <- Script principal que ejecuta el analizador léxico desde consola.
+│                                Recibe un archivo .ts y un nombre de usuario como argumento.
+├── run_parser.py              <- Script principal que ejecuta el analizador sintactico desde consola.
 │                                Recibe un archivo .ts y un nombre de usuario como argumento.
 │
 ├── logs/                     <- Carpeta donde se generan los logs (.txt) de cada análisis.
@@ -30,6 +34,13 @@ Coloca tu archivo .ts de prueba en la carpeta tests/.
 Ejecuta el siguiente comando desde la raíz del proyecto:
 
 python run_lexer.py tests/archivo.ts usuarioGit
+
+## ▶️ ¿Cómo ejecutar el parser?
+Coloca tu archivo .ts de prueba en la carpeta tests/.
+
+Ejecuta el siguiente comando desde la raíz del proyecto:
+
+python run_parser.py tests/archivo.ts usuarioGit
 
 📌 Cambia:
 archivo.ts por el nombre del archivo que quieres analizar.
