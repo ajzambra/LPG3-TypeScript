@@ -1,0 +1,118 @@
+-------Resultados del análisis sintáctico:-----------
+
+✔ Producciones reconocidas:
+✔ type
+✔ property id in interface
+✔ interface body
+✔ type
+✔ property nombre in interface
+✔ interface body
+✔ type
+✔ property cantidad in interface
+✔ interface body
+✔ type
+✔ property precio in interface
+✔ interface body
+✔ interface: Producto
+✔ element
+✔ program
+✔ type
+✔ type
+✔ type
+✔ parameters
+✔ parameters
+✔ type
+✔ type
+✔ expression
+✔ expression
+✔ statement
+✔ type
+✔ type
+✔ parameters
+✔ type
+✔ expression
+✔ letAssignment (no type): total
+✔ statement
+✔ instruction list
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ statement
+✔ instruction list
+✔ statement
+✔ for...of structure
+✔ statement
+✔ instruction list
+✔ expression
+✔ statement
+✔ instruction list
+✔ function body
+✔ function declaration: valorTotalInventario
+✔ element
+✔ program
+✔ type
+✔ optional expression list
+✔ array declaration: inventario
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ object property: id
+✔ expression
+✔ object property: nombre
+✔ expression
+✔ object property: cantidad
+✔ expression
+✔ object property: precio
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object with many variables
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ expression
+✔ assignment to inventario
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ object property: id
+✔ expression
+✔ object property: nombre
+✔ expression
+✔ object property: cantidad
+✔ expression
+✔ object property: precio
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object with many variables
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ expression
+✔ assignment to inventario
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ expression
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ element
+✔ program
+
+---------- :( Errores sintácticos encontrados-------------:
+✘ Línea 10: token inesperado '('
+✘ Línea 12: token inesperado '}'
