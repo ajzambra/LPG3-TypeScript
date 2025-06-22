@@ -1,0 +1,104 @@
+-------Resultados del análisis sintáctico:-----------
+
+✔ Producciones reconocidas:
+✔ type
+✔ type
+✔ tuple type
+✔ parameters
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: largo
+✔ statement
+✔ instruction list
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: ancho
+✔ statement
+✔ instruction list
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ statement
+✔ instruction list
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: area
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: perimetro
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ type
+✔ type
+✔ tuple type
+✔ expression
+✔ expression
+✔ tuple value
+✔ letAssignment: dimensiones
+✔ element
+✔ program
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ expression
+✔ element
+✔ program
+✔ expression
+✔ for init
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ for update
+✔ expression
+✔ expression
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ statement
+✔ instruction list
+✔ statement
+✔ for structure
+✔ element
+✔ program
+
+---------- :( Errores sintácticos encontrados-------------:
+✘ Línea 1: token inesperado 'void'
+✘ Línea 6: token inesperado ';'
+✘ Línea 12: token inesperado '}'

@@ -207,62 +207,10 @@ def p_error(p):
         msg = "✘ Fin de archivo inesperado"
     print(msg)
     error_log.append(msg)
-
-
-
-# ----------- Andres Zambrano -------------
     
-# ----------- While -------------
-def p_controlEstructure_while(p):
-    'controlEstructure : WHILE LPAREN expression RPAREN statement'
-    log_info("while structure")
-
-
-
-# ----------- Var - Const-------------
-def p_varAssignment(p):
-    'varAssignment : VAR IDENTIFIER COLON type EQUAL expression SEMICOLON'
-    log_info(f"varAssignment: {p[2]}")
-
-def p_varAssignment_no_type(p):
-    'varAssignment : VAR IDENTIFIER EQUAL expression SEMICOLON'
-    log_info(f"varAssignment (no type): {p[2]}")
-
-# ----------- Arrow Function -------------
-def p_arrow_function(p):
-    'arrow_function : CONST IDENTIFIER EQUAL LPAREN parameters RPAREN ARROW LBRACE body_function RBRACE SEMICOLON'
-    log_info(f"arrow function: {p[2]}")
-
-# ----------- Parser Execution -------------
-parser = yacc.yacc(start='program')
-
-def run_parser(file_path, username):
-    global error_log, success_log
-    error_log = []
-    success_log = []
-
-    with open(file_path, 'r', encoding='utf-8') as file:
-        data = file.read()
-        parser.parse(data)
-
-    base_username = username.lower().replace(" ", "")
-    now = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
-    log_file = f"logs/sintactico-{base_username}-{now}.txt"
-
-    with open(log_file, 'w', encoding='utf-8') as log:
-        log.write("-------Resultados del análisis sintáctico:-----------\n\n")
-        if success_log:
-            log.write("✔ Producciones reconocidas:\n")
-            for s in success_log:
-                log.write(f"{s}\n")
-            log.write("\n")
-        if error_log:
-            log.write("---------- :( Errores sintácticos encontrados-------------:\n")
-            for err in error_log:
-                log.write(f"{err}\n")
-        else:
-            log.write(" ---------------:D Análisis sintáctico completado sin errores. -----------------\n")
-
+    
+    
+    
     
 
 # ----------- Roberto Barrios -------------
@@ -327,6 +275,69 @@ def p_enum_members(p):
 def p_async_function(p):
     'async_function : ASYNC FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
     log_info(f"async function: {p[3]}")
+    
+    
+    
+    
+    
+    
+
+# ----------- Andres Zambrano -------------
+    
+# ----------- While -------------
+def p_controlEstructure_while(p):
+    'controlEstructure : WHILE LPAREN expression RPAREN statement'
+    log_info("while structure")
+
+
+
+# ----------- Var - Const-------------
+def p_varAssignment(p):
+    'varAssignment : VAR IDENTIFIER COLON type EQUAL expression SEMICOLON'
+    log_info(f"varAssignment: {p[2]}")
+
+def p_varAssignment_no_type(p):
+    'varAssignment : VAR IDENTIFIER EQUAL expression SEMICOLON'
+    log_info(f"varAssignment (no type): {p[2]}")
+
+# ----------- Arrow Function -------------
+def p_arrow_function(p):
+    'arrow_function : CONST IDENTIFIER EQUAL LPAREN parameters RPAREN ARROW LBRACE body_function RBRACE SEMICOLON'
+    log_info(f"arrow function: {p[2]}")
+
+# ----------- Parser Execution -------------
+parser = yacc.yacc(start='program')
+
+def run_parser(file_path, username):
+    global error_log, success_log
+    error_log = []
+    success_log = []
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        data = file.read()
+        parser.parse(data)
+
+    base_username = username.lower().replace(" ", "")
+    now = datetime.datetime.now().strftime("%d%m%Y-%Hh%M")
+    log_file = f"logs/sintactico-{base_username}-{now}.txt"
+
+    with open(log_file, 'w', encoding='utf-8') as log:
+        log.write("-------Resultados del análisis sintáctico:-----------\n\n")
+        if success_log:
+            log.write("✔ Producciones reconocidas:\n")
+            for s in success_log:
+                log.write(f"{s}\n")
+            log.write("\n")
+        if error_log:
+            log.write("---------- :( Errores sintácticos encontrados-------------:\n")
+            for err in error_log:
+                log.write(f"{err}\n")
+        else:
+            log.write(" ---------------:D Análisis sintáctico completado sin errores. -----------------\n")
+
+    
+
+
 
 
 
