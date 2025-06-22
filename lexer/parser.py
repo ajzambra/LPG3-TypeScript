@@ -109,6 +109,7 @@ def p_type(p):
             | STRING_TYPE
             | BOOLEAN_TYPE
             | IDENTIFIER
+            | VOID
             | type LBRACKET RBRACKET'''
     log_info("type")
 
@@ -183,7 +184,9 @@ def p_statement(p):
                  | controlEstructure
                  | RETURN expression SEMICOLON
                  | forEstructure
+                 | RETURN SEMICOLON
                  | class_definition'''
+                
     log_info("statement")
 
 
