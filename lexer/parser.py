@@ -18,14 +18,18 @@ def p_program(p):
 
 def p_element(p):
     '''element : letAssignment
-                | declaracion
-                | function
-                | controlEstructure
-                | forEstructure
-                | statement
-                | expression SEMICOLON
-                | consolelog'''
+               | declaracion
+               | function
+               | constAssignment
+               | enum_definition
+               | controlEstructure
+               | forEstructure
+               | class_definition
+               | statement
+               | expression SEMICOLON
+               | consolelog'''
     log_info("element")
+
 
 # ----------- Declare Variable -------------
 def p_letAssignment(p):
@@ -165,16 +169,19 @@ def p_controlEstructure(p):
 # ----------- Statements and instructions -------------
 def p_statement(p):
     '''statement : LBRACE instruction_list RBRACE
-                | letAssignment
-                | declaracion
-                | function
-                | consolelog
-                | expression SEMICOLON
-                | controlEstructure
-                | RETURN expression SEMICOLON
-                | forEstructure
-                | varAssignment'''
+                 | letAssignment
+                 | varAssignment
+                 | constAssignment
+                 | declaracion
+                 | function
+                 | consolelog
+                 | expression SEMICOLON
+                 | controlEstructure
+                 | RETURN expression SEMICOLON
+                 | forEstructure
+                 | class_definition'''
     log_info("statement")
+
 
 def p_instruction_list(p):
     '''instruction_list : instruction_list statement
@@ -281,5 +288,43 @@ def p_class_element(p):
                      | varAssignment
                      | constAssignment'''
     log_info("class element")
+
+
+# ----------- SWITCH ------------
+def p_controlEstructure_switch(p):
+    'controlEstructure : SWITCH LPAREN expression RPAREN LBRACE case_block RBRACE'
+    log_info("switch structure")
+
+def p_case_block(p):
+    '''case_block : case_block case
+                  | case
+                  | empty'''
+    log_info("case block")
+
+def p_case(p):
+    '''case : CASE expression COLON instruction_list
+            | DEFAULT COLON instruction_list'''
+    log_info("case")
+
+
+# -----------ENUM -------------
+def p_enum_definition(p):
+    'enum_definition : ENUM IDENTIFIER LBRACE enum_members RBRACE'
+    log_info(f"enum: {p[2]}")
+
+def p_enum_members(p):
+    '''enum_members : IDENTIFIER
+                    | IDENTIFIER COMMA enum_members'''
+    log_info("enum members")
+    
+    
+# ----------- ASYNC function -------------
+def p_async_function(p):
+    'function : ASYNC FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
+    log_info(f"async function: {p[3]}")
+
+
+
+
 
 
