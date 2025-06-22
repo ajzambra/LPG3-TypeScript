@@ -253,3 +253,33 @@ def run_parser(file_path, username):
 
     
 
+# ----------- Roberto Barrios -------------
+# ----------- CONST ASSIGNMENT -------------
+def p_constAssignment(p):
+    'constAssignment : CONST IDENTIFIER COLON type EQUAL expression SEMICOLON'
+    log_info(f"const assignment (typed): {p[2]}")
+
+def p_constAssignment_no_type(p):
+    'constAssignment : CONST IDENTIFIER EQUAL expression SEMICOLON'
+    log_info(f"const assignment: {p[2]}")
+
+
+# ----------- CLASS WITH CONSTRUCTOR -------------
+def p_class_definition(p):
+    'class_definition : CLASS IDENTIFIER LBRACE class_body RBRACE'
+    log_info(f"class definition: {p[2]}")
+
+def p_class_body(p):
+    '''class_body : class_body class_element
+                  | class_element
+                  | empty'''
+    log_info("class body")
+
+def p_class_element(p):
+    '''class_element : function
+                     | letAssignment
+                     | varAssignment
+                     | constAssignment'''
+    log_info("class element")
+
+
