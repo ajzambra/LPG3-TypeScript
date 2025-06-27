@@ -1,0 +1,262 @@
+-------Resultados del análisis sintáctico:-----------
+
+✔ Producciones reconocidas:
+✔ type
+✔ expression
+✔ letAssignment: edad
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ expression list
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ array declaration: edades
+✔ element
+✔ program
+✔ expression
+✔ letAssignment (no type): b
+✔ element
+✔ program
+✔ expression
+✔ letAssignment (no type): c
+✔ element
+✔ program
+✔ expression
+✔ letAssignment (no type): d
+✔ element
+✔ program
+✔ type
+✔ type
+✔ parameter: notas de tipo number
+✔ type
+✔ type
+✔ expression
+✔ letAssignment: suma
+✔ statement
+✔ instruction list
+✔ expression
+✔ for init (let, sin tipo declarado): a
+✔ for init
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ for update
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ statement
+✔ instruction list
+✔ statement
+✔ for structure
+✔ statement
+✔ instruction list
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: promedio
+✔ statement
+✔ instruction list
+✔ expression
+✔ statement
+✔ instruction list
+✔ function body
+✔ function declaration: promedioNotas retorna number
+✔ element
+✔ program
+✔ expression
+✔ letAssignment (no type): estudiante
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression list
+✔ expression list
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ array declaration: notas
+✔ element
+✔ program
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ llamada a función: promedioNotas
+✔ letAssignment (no type): resultado
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ statement
+✔ instruction list
+✔ statement
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ statement
+✔ instruction list
+✔ statement
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ statement
+✔ instruction list
+✔ statement
+✔ if/else structure
+✔ statement
+✔ if/else structure
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: age
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: nombre
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: activo
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: prueba1
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: prueba2
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: prueba3
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: sum
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: saludo
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: concatenado
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: suma
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: x1
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: suma2
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ expression
+✔ expression
+✔ letAssignment: x2
+✔ element
+✔ program
+✔ type
+✔ expression
+✔ letAssignment: nombre2
+✔ element
+✔ program
+
+ ---------------:D Análisis sintáctico completado sin errores. -----------------
+
+-------Resultados del análisis semántico:-----------
+
+---------- :( Errores semánticos encontrados-------------:
+Error semántico: sólo se pueden dividir números, no 'number' y 'None' (línea 17)
+Error semántico: 'promedio' declarado como 'number' pero asignado un 'undefined'
+Error semántico: 'prueba1' declarado como 'number' pero asignado un 'string'
+Error semántico: 'prueba2' declarado como 'string' pero asignado un 'number'
+Error semántico: 'prueba3' declarado como 'boolean' pero asignado un 'string'
+Error semántico: no se puede sumar 'number' y 'boolean' (línea 51)
+Error semántico: 'suma' declarado como 'number' pero asignado un 'undefined'
+Error semántico: no se puede sumar 'boolean' y 'string' (línea 52)
+Error semántico: 'x1' declarado como 'boolean' pero asignado un 'undefined'
+Error semántico: 'suma2' declarado como 'number' pero asignado un 'string'
+✘ Línea 56: variable 'y' no declarada
+Error semántico: no se puede sumar 'undefined' y 'number' (línea 56)
+Error semántico: 'x2' declarado como 'number' pero asignado un 'undefined'
+✘ Línea 57: variable 'persona' no declarada
+Error semántico: 'nombre2' declarado como 'string' pero asignado un 'undefined'
+
+✔ Variables declaradas correctamente:
+edad: number
+b: boolean
+c: string
+d: number
+notas: number
+a: number
+promedioNotas: {'type': 'function', 'return_type': 'number'}
+estudiante: string
+resultado: number
+age: number
+nombre: string
+activo: boolean
+sum: number
+saludo: string
+concatenado: string
+No hay variables declaradas correctamente.

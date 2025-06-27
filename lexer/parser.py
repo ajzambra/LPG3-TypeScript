@@ -5,6 +5,8 @@ import datetime
 # ----------- Logs -------------
 success_log = []
 error_log = []
+vars_con_error = set()
+
 
 def log_info(msg):
     print(f"✔ {msg}")
@@ -40,14 +42,40 @@ def p_assignment(p):
     log_info(f"assignment to {p[1]}")
 
 
+# ----------- Symbol Table -------------
+symbol_table = {}
+semantic_errors = []
+
+
+#----------Compatibilty functions for semantic analysis-------------
+def are_types_compatible(declared_type, value_type):
+    return declared_type == value_type
+
+
+
+
+
+
+#Added by Leonardo Zambrano
 
 # ----------- Declare Variable -------------
 def p_letAssignment(p):
     'letAssignment : LET IDENTIFIER COLON type EQUAL expression SEMICOLON'
+    var = p[2]
+    declared_type = p[4]
+    value_type = p[6]
+    symbol_table[var] = declared_type
+    if not are_types_compatible(declared_type, value_type):
+        semantic_errors.append(f"Error semántico: '{var}' declarado como '{declared_type}' pero asignado un '{value_type}'")
+        vars_con_error.add(var)
     log_info(f"letAssignment: {p[2]}")
+
 
 def p_letAssignment_no_type(p):
     'letAssignment : LET IDENTIFIER EQUAL expression SEMICOLON'
+    var = p[2]
+    value_type = p[4]
+    symbol_table[var] = value_type
     log_info(f"letAssignment (no type): {p[2]}")
 
 # ----------- Array Assignment -------------
@@ -79,6 +107,22 @@ def p_for_init(p):
                 | LET IDENTIFIER COLON type EQUAL expression
                 | expression
                 | empty'''
+    # let a = expr;
+    if len(p) == 5:
+        var = p[2]
+        value_type = p[4]
+        symbol_table[var] = value_type
+        log_info(f"for init (let, sin tipo declarado): {var}")
+    # let a: tipo = expr;
+    elif len(p) == 7:
+        var = p[2]
+        declared_type = p[4]
+        value_type = p[6]
+        symbol_table[var] = declared_type
+        if not are_types_compatible(declared_type, value_type):
+            semantic_errors.append(f"Error semántico: '{var}' declarado como '{declared_type}' pero asignado un '{value_type}'")
+            vars_con_error.add(var)
+        log_info(f"for init (let, con tipo declarado): {var}")
     log_info("for init")
 
 
@@ -94,13 +138,29 @@ def p_for_update(p):
 # ----------- Function and Parameter-------------
 def p_function(p):
     'function : FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
-    log_info(f"function declaration: {p[2]}")
+    func_name = p[2]
+    return_type = p[7]
+    symbol_table[func_name] = {
+        "type": "function",
+        "return_type": return_type,
+        # Aquí puedes guardar también los tipos de parámetros si lo necesitas
+    }
+    log_info(f"function declaration: {func_name} retorna {return_type}")
 
 def p_parameters(p):
     '''parameters : IDENTIFIER COLON type
                 | IDENTIFIER COLON type COMMA parameters
                 | empty'''
-    log_info("parameters")
+    if len(p) == 4:
+        var = p[1]
+        declared_type = p[3]
+        symbol_table[var] = declared_type
+        log_info(f"parameter: {var} de tipo {declared_type}")
+    elif len(p) > 4:
+        var = p[1]
+        declared_type = p[3]
+        symbol_table[var] = declared_type
+        log_info(f"parameter: {var} de tipo {declared_type}")
 
 def p_body_function(p):
     '''body_function : instruction_list
@@ -125,43 +185,257 @@ def p_type(p):
             | VOID
             | type LBRACKET RBRACKET'''
     log_info("type")
+    p[0] = p[1]
 
 # ----------- EXPRESSION AND CONSOLE LOG ---------
-def p_expression(p):
-    '''expression : expression PLUS expression
-                | expression MINUS expression
-                | expression TIMES expression
-                | expression DIV expression
-                | expression MOD expression
-                | expression PLUS_ASSIGN expression
-                | expression MINUS_ASSIGN expression
-                | expression MULT_ASSIGN expression
-                | expression DIV_ASSIGN expression
-                | expression MOD_ASSIGN expression
-                | expression POT expression
-                | expression AND expression
-                | expression OR expression
-                | expression EQ expression
-                | expression NEQ expression
-                | expression STRICT_EQ expression
-                | expression STRICT_NEQ expression
-                | expression LT expression
-                | expression GT expression
-                | expression LE expression
-                | expression GE expression
-                | PROMPT LPAREN STRING RPAREN
-                | NOT expression
-                | LPAREN expression RPAREN
-                | expression DOT IDENTIFIER
-                | expression LBRACKET expression RBRACKET
-                | IDENTIFIER LPAREN lista_expresiones_opt RPAREN
-                | NUMBER
-                | FLOAT
-                | STRING
-                | IDENTIFIER
-                | TRUE
-                | FALSE'''
+# def p_expression(p):
+#     '''expression : expression PLUS expression
+#                 | expression MINUS expression
+#                 | expression TIMES expression
+#                 | expression DIV expression
+#                 | expression MOD expression
+#                 | expression PLUS_ASSIGN expression
+#                 | expression MINUS_ASSIGN expression
+#                 | expression MULT_ASSIGN expression
+#                 | expression DIV_ASSIGN expression
+#                 | expression MOD_ASSIGN expression
+#                 | expression POT expression
+#                 | expression AND expression
+#                 | expression OR expression
+#                 | expression EQ expression
+#                 | expression NEQ expression
+#                 | expression STRICT_EQ expression
+#                 | expression STRICT_NEQ expression
+#                 | expression LT expression
+#                 | expression GT expression
+#                 | expression LE expression
+#                 | expression GE expression
+#                 | PROMPT LPAREN STRING RPAREN
+#                 | NOT expression
+#                 | LPAREN expression RPAREN
+#                 | expression DOT IDENTIFIER
+#                 | expression LBRACKET expression RBRACKET
+#                 | IDENTIFIER LPAREN lista_expresiones_opt RPAREN
+#                 | NUMBER
+#                 | FLOAT
+#                 | STRING
+#                 | IDENTIFIER
+#                 | TRUE
+#                 | FALSE'''
+#     log_info("expression")
+
+def p_expression_plus(p):
+    'expression : expression PLUS expression'
+    left_type = p[1]
+    right_type = p[3]
+    # Plus between two expressions number and string
+    if left_type == 'number' and right_type == 'number':
+        p[0] = 'number'
+    elif left_type == 'string' or right_type == 'string':
+        # Allow string + string, string + number, number + string
+        if left_type in ('string', 'number') and right_type in ('string', 'number'):
+            p[0] = 'string'
+        else:
+            p[0] = 'undefined'
+            semantic_errors.append(
+                f"Error semántico: no se puede sumar '{left_type}' y '{right_type}' (línea {p.lineno(2)})"
+            )
+    else:
+        p[0] = 'undefined'
+        semantic_errors.append(
+            f"Error semántico: no se puede sumar '{left_type}' y '{right_type}' (línea {p.lineno(2)})"
+        )
     log_info("expression")
+
+
+def p_expression_minus(p):
+    'expression : expression MINUS expression'
+    left_type = p[1]
+    right_type = p[3]
+    if left_type == 'number' and right_type == 'number':
+        p[0] = 'number'
+    else:
+        p[0] = 'undefined'
+        semantic_errors.append(
+            f"Error semántico: no se puede restar '{left_type}' y '{right_type}' (línea {p.lineno(2)})"
+        )
+    log_info("expression")
+
+def p_expression_times(p):
+    'expression : expression TIMES expression'
+    left_type = p[1]
+    right_type = p[3]
+    if left_type == 'number' and right_type == 'number':
+        p[0] = 'number'
+    else:
+        p[0] = 'undefined'
+        semantic_errors.append(
+            f"Error semántico: no se puede multiplicar '{left_type}' y '{right_type}' (línea {p.lineno(2)})"
+        )
+    log_info("expression")
+
+def p_expression_div(p):
+    'expression : expression DIV expression'
+    left_type = p[1]
+    right_type = p[3]
+    if left_type == 'number' and right_type == 'number':
+        p[0] = 'number'
+    else:
+        p[0] = 'undefined'
+        semantic_errors.append(
+            f"Error semántico: sólo se pueden dividir números, no '{left_type}' y '{right_type}' (línea {p.lineno(2)})"
+        )
+    log_info("expression")
+
+
+def p_expression_mod(p):
+    'expression : expression MOD expression'
+    left_type = p[1]
+    right_type = p[3]
+    if left_type == 'number' and right_type == 'number':
+        p[0] = 'number'
+    else:
+        p[0] = 'undefined'
+        semantic_errors.append(
+            f"Error semántico: sólo se pueden calcular restos de números, no '{left_type}' y '{right_type}' (línea {p.lineno(2)})"
+        )
+    log_info("expression")
+
+def p_expression_plus_assign(p):
+    'expression : expression PLUS_ASSIGN expression'
+    log_info("expression")
+
+def p_expression_minus_assign(p):
+    'expression : expression MINUS_ASSIGN expression'
+    log_info("expression")
+
+def p_expression_mult_assign(p):
+    'expression : expression MULT_ASSIGN expression'
+    log_info("expression")
+
+def p_expression_div_assign(p):
+    'expression : expression DIV_ASSIGN expression'
+    log_info("expression")
+
+def p_expression_mod_assign(p):
+    'expression : expression MOD_ASSIGN expression'
+    log_info("expression")
+
+def p_expression_pot(p):
+    'expression : expression POT expression'
+    log_info("expression")
+
+def p_expression_and(p):
+    'expression : expression AND expression'
+    log_info("expression")
+
+def p_expression_or(p):
+    'expression : expression OR expression'
+    log_info("expression")
+
+def p_expression_eq(p):
+    'expression : expression EQ expression'
+    log_info("expression")
+
+def p_expression_neq(p):
+    'expression : expression NEQ expression'
+    log_info("expression")
+
+def p_expression_strict_eq(p):
+    'expression : expression STRICT_EQ expression'
+    log_info("expression")
+
+def p_expression_strict_neq(p):
+    'expression : expression STRICT_NEQ expression'
+    log_info("expression")
+
+def p_expression_lt(p):
+    'expression : expression LT expression'
+    log_info("expression")
+
+def p_expression_gt(p):
+    'expression : expression GT expression'
+    log_info("expression")
+
+def p_expression_le(p):
+    'expression : expression LE expression'
+    log_info("expression")
+
+def p_expression_ge(p):
+    'expression : expression GE expression'
+    log_info("expression")
+
+def p_expression_prompt(p):
+    'expression : PROMPT LPAREN STRING RPAREN'
+    log_info("expression")
+    p[0] = 'string'
+
+def p_expression_not(p):
+    'expression : NOT expression'
+    log_info("expression")
+
+def p_expression_paren(p):
+    'expression : LPAREN expression RPAREN'
+    log_info("expression")
+    p[0] = p[2]
+
+def p_expression_dot_identifier(p):
+    'expression : expression DOT IDENTIFIER'
+    log_info("expression")
+
+def p_expression_bracket(p):
+    'expression : expression LBRACKET expression RBRACKET'
+    log_info("expression")
+
+def p_expression_call(p):
+    'expression : IDENTIFIER LPAREN lista_expresiones_opt RPAREN'
+    func_name = p[1]
+    if func_name in symbol_table and symbol_table[func_name]["type"] == "function":
+        p[0] = symbol_table[func_name]["return_type"]
+    else:
+        p[0] = "undefined"
+        semantic_errors.append(
+            f"Error semántico: función '{func_name}' no declarada (línea {p.lineno(1)})"
+        )
+    log_info(f"llamada a función: {func_name}")
+
+def p_expression_number(p):
+    'expression : NUMBER'
+    log_info("expression")
+    p[0] = 'number'
+
+def p_expression_float(p):
+    'expression : FLOAT'
+    log_info("expression")
+    p[0] = 'number'
+
+def p_expression_string(p):
+    'expression : STRING'
+    log_info("expression")
+    p[0] = 'string'
+
+def p_expression_identifier(p):
+    'expression : IDENTIFIER'
+    log_info("expression")
+    name = p[1]
+    if name in symbol_table:
+        p[0] = symbol_table[name]
+    else:
+        error_msg = f"✘ Línea {p.lineno(1)}: variable '{name}' no declarada"
+        print(error_msg)
+        semantic_errors.append(error_msg)
+        p[0] = 'undefined'
+
+def p_expression_true(p):
+    'expression : TRUE'
+    log_info("expression")
+    p[0] = 'boolean'
+
+def p_expression_false(p):
+    'expression : FALSE'
+    log_info("expression")
+    p[0] = 'boolean'
+
 
 def p_expression_increment(p):
     '''expression : expression PLUSPLUS
@@ -202,6 +476,10 @@ def p_statement(p):
                 
     log_info("statement")
 
+
+def p_statement_block(p):
+    '''statement : LBRACE RBRACE'''
+    log_info("block statement")
 
 
 def p_instruction_list(p):
@@ -358,10 +636,22 @@ def p_object_property(p):
 # ----------- Parser Execution -------------
 parser = yacc.yacc(start='program')
 
+if semantic_errors:
+    print("\nErrores semánticos encontrados:")
+    for err in semantic_errors:
+        print(err)
+else:
+    print("\nAnálisis semántico completado sin errores.")
+
+
+
 def run_parser(file_path, username):
-    global error_log, success_log
+    global error_log, success_log, semantic_errors, symbol_table, vars_con_error
     error_log = []
     success_log = []
+    semantic_errors = []
+    symbol_table = {}
+    vars_con_error = set()
 
     with open(file_path, 'r', encoding='utf-8') as file:
         data = file.read()
@@ -384,6 +674,30 @@ def run_parser(file_path, username):
                 log.write(f"{err}\n")
         else:
             log.write(" ---------------:D Análisis sintáctico completado sin errores. -----------------\n")
+        
+        
+        log.write("\n")
+        log.write("-------Resultados del análisis semántico:-----------\n\n")
+        if semantic_errors:
+            log.write("---------- :( Errores semánticos encontrados-------------:\n")
+            for err in semantic_errors:
+                log.write(f"{err}\n")
+            log.write("\n")
+        else:
+            log.write("--------------- :D Análisis semántico completado sin errores. -----------------\n\n")
+        if symbol_table:
+            log.write("✔ Variables declaradas correctamente:\n")
+            alguna = False
+            for var, tipo in symbol_table.items():
+                 if var not in vars_con_error:
+                    log.write(f"{var}: {tipo}\n")
+                    alguna = True
+        if not alguna:
+            log.write("Ninguna variable fue declarada correctamente.\n")
+        else:
+           log.write("No hay variables declaradas correctamente.\n")
+
+       
 
     
 
