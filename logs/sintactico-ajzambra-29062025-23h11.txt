@@ -1,0 +1,149 @@
+-------Resultados del análisis sintáctico:-----------
+
+✔ Producciones reconocidas:
+✔ type
+✔ property id in interface
+✔ interface body
+✔ type
+✔ property nombre in interface
+✔ interface body
+✔ type
+✔ property cantidad in interface
+✔ interface body
+✔ type
+✔ property precio in interface
+✔ interface body
+✔ interface: Producto
+✔ element
+✔ program
+✔ type
+✔ type
+✔ type
+✔ parameter: nuevo de tipo Producto
+✔ parameter: inventario de tipo Producto
+✔ type
+✔ type
+✔ expression
+✔ expression
+✔ return statement con valor
+✔ type
+✔ type
+✔ parameter: inventario de tipo Producto
+✔ type
+✔ expression
+✔ letAssignment (no type): total
+✔ statement
+✔ instruction list
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ statement
+✔ instruction list
+✔ statement
+✔ for...of structure
+✔ statement
+✔ instruction list
+✔ expression
+✔ return statement con valor
+✔ instruction list
+✔ function body
+✔ function declaration: valorTotalInventario retorna number
+✔ element
+✔ program
+✔ expression
+✔ for init (let, sin tipo declarado): i
+✔ for init
+✔ expression
+✔ expression
+✔ expression
+✔ expression
+✔ for update
+✔ break statement
+✔ instruction list
+✔ for...of structure
+✔ statement
+✔ type
+✔ optional expression list
+✔ array declaration: inventario
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ object property: id
+✔ expression
+✔ object property: nombre
+✔ expression
+✔ object property: cantidad
+✔ expression
+✔ object property: precio
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object with many variables
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ llamada a función: agregarProducto
+✔ assignment to inventario
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ object property: id
+✔ expression
+✔ object property: nombre
+✔ expression
+✔ object property: cantidad
+✔ expression
+✔ object property: precio
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object properties
+✔ object with many variables
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ llamada a función: agregarProducto
+✔ assignment to inventario
+✔ element
+✔ program
+✔ expression
+✔ expression
+✔ expression list
+✔ optional expression list
+✔ llamada a función: valorTotalInventario
+✔ expression list
+✔ expression list
+✔ optional expression list
+✔ console.log
+✔ element
+✔ program
+
+---------- :( Errores sintácticos encontrados-------------:
+✘ Línea 9: token inesperado '('
+✘ Línea 11: token inesperado '}'
+✘ Línea 23: token inesperado '{'
+✘ Línea 27: token inesperado '}'
+
+-------Resultados del análisis semántico:-----------
+
+---------- :( Errores semánticos encontrados-------------:
+✘ Línea 17: variable 'item' no declarada
+✘ Línea 17: variable 'item' no declarada
+Error semántico: no se puede multiplicar 'None' y 'None' (línea 17)
+Error semántico: función 'agregarProducto' no declarada (línea 31)
+Error semántico: función 'agregarProducto' no declarada (línea 38)
+
+✔ Variables declaradas correctamente:
+nuevo: Producto
+inventario: Producto
+total: number
+valorTotalInventario: {'type': 'function', 'return_type': 'number'}
+i: number
+No hay variables declaradas correctamente.

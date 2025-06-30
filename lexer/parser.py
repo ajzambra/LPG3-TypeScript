@@ -7,6 +7,11 @@ success_log = []
 error_log = []
 vars_con_error = set()
 
+current_function = None
+context_stack = []
+
+
+
 
 def log_info(msg):
     print(f"✔ {msg}")
@@ -32,7 +37,6 @@ def p_element(p):
                | constAssignment
                | enum_definition
                | controlEstructure
-               | forEstructure
                | class_definition
                | statement
                | interface
@@ -89,6 +93,14 @@ def p_letAssignment_no_type(p):
     symbol_table[var] = value_type
     log_info(f"letAssignment (no type): {p[2]}")
 
+def p_letAssignment_declaration_only(p):
+    'letAssignment : LET IDENTIFIER COLON type SEMICOLON'
+    var = p[2]
+    declared_type = p[4]
+    symbol_table[var] = declared_type
+    log_info(f"letAssignment (declaración sin valor): {var}")
+
+
 # ----------- Array Assignment -------------
 def p_declaracion(p):
     '''declaracion : LET IDENTIFIER COLON type LBRACKET RBRACKET EQUAL LBRACKET lista_expresiones_opt RBRACKET SEMICOLON'''
@@ -104,27 +116,45 @@ def p_lista_expresiones(p):
                         | expression COMMA lista_expresiones'''
     log_info("expression list")
 
-# ----------- For -------------
-def p_forEstructure(p):
-    '''forEstructure : FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN statement'''
-    log_info("for structure")
 
-def p_for_of_structure(p):
-    'forEstructure : FOR LPAREN CONST IDENTIFIER OF IDENTIFIER RPAREN statement'
-    log_info("for...of structure")
+def p_push_loop(p):
+    'push_loop :'
+    context_stack.append("loop")
+
+def p_pop_loop(p):
+    'pop_loop :'
+    context_stack.pop()
+
+# ----------- For -------------
+
+def p_forEstructure(p):
+    '''forEstructure : FOR LPAREN for_init SEMICOLON expression SEMICOLON for_update RPAREN LBRACE push_loop instruction_list pop_loop RBRACE
+                   | FOR LPAREN CONST IDENTIFIER OF IDENTIFIER RPAREN push_loop statement pop_loop'''
+    # Primera alternativa: p[0] = p[12]
+    if len(p) == 13:
+        p[0] = p[12]
+        log_info("for structure")
+    # Segunda alternativa: p[0] = p[9]
+    else:
+        p[0] = p[9]
+        log_info("for...of structure")
+
+
+
+
 
 def p_for_init(p):
     '''for_init : LET IDENTIFIER EQUAL expression
                 | LET IDENTIFIER COLON type EQUAL expression
+                | IDENTIFIER EQUAL expression
                 | expression
                 | empty'''
-    # let a = expr;
     if len(p) == 5:
         var = p[2]
         value_type = p[4]
         symbol_table[var] = value_type
         log_info(f"for init (let, sin tipo declarado): {var}")
-    # let a: tipo = expr;
+        p[0] = value_type  # ← NECESARIO
     elif len(p) == 7:
         var = p[2]
         declared_type = p[4]
@@ -134,7 +164,19 @@ def p_for_init(p):
             semantic_errors.append(f"Error semántico: '{var}' declarado como '{declared_type}' pero asignado un '{value_type}'")
             vars_con_error.add(var)
         log_info(f"for init (let, con tipo declarado): {var}")
+        p[0] = value_type  # ← NECESARIO
+    elif len(p) == 4 and isinstance(p[1], str):
+        var = p[1]
+        value_type = p[3]
+        if var in symbol_table:
+            log_info(f"for init (uso de variable declarada): {var}")
+        else:
+            semantic_errors.append(f"✘ Línea {p.lineno(1)}: variable '{var}' no declarada")
+        p[0] = value_type
+    elif len(p) == 2:
+        p[0] = None
     log_info("for init")
+
 
 
 def p_for_update(p):
@@ -149,14 +191,28 @@ def p_for_update(p):
 # ----------- Function and Parameter-------------
 def p_function(p):
     'function : FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
+    global current_function
     func_name = p[2]
     return_type = p[7]
+    current_function = func_name
     symbol_table[func_name] = {
         "type": "function",
         "return_type": return_type,
-        # Aquí puedes guardar también los tipos de parámetros si lo necesitas
     }
     log_info(f"function declaration: {func_name} retorna {return_type}")
+    current_function = None  
+
+def p_statement_return_expr(p):
+    'statement : RETURN expression SEMICOLON'
+    log_info("return statement con valor")
+    if current_function:
+        expected = symbol_table[current_function]["return_type"]
+        returned = p[2]
+        if not are_types_compatible(expected, returned):
+            semantic_errors.append(
+                f"Error semántico: función '{current_function}' debe retornar '{expected}' pero retorna '{returned}'"
+            )
+
 
 def p_parameters(p):
     '''parameters : IDENTIFIER COLON type
@@ -480,7 +536,6 @@ def p_statement(p):
                  | consolelog
                  | expression SEMICOLON
                  | controlEstructure
-                 | RETURN expression SEMICOLON
                  | forEstructure
                  | RETURN SEMICOLON
                  | class_definition'''
@@ -570,7 +625,9 @@ def p_class_element(p):
 # ----------- SWITCH ------------
 def p_controlEstructure_switch(p):
     'controlEstructure : SWITCH LPAREN expression RPAREN LBRACE case_block RBRACE'
+    context_stack.append("switch")
     log_info("switch structure")
+    context_stack.pop()
 
 def p_case_block(p):
     '''case_block : case_block case
@@ -582,6 +639,23 @@ def p_case(p):
     '''case : CASE expression COLON instruction_list
             | DEFAULT COLON instruction_list'''
     log_info("case")
+
+
+# -----------BREAK -------------
+def p_statement_break(p):
+    'statement : BREAK SEMICOLON'
+    if not any(ctx in ("loop", "switch") for ctx in context_stack):
+        semantic_errors.append("Error semántico: 'break' fuera de bucle o switch")
+    log_info("break statement")
+
+
+
+
+def p_statement_continue(p):
+    'statement : CONTINUE SEMICOLON'
+    if not any(ctx == "loop" for ctx in context_stack):
+        semantic_errors.append("Error semántico: 'continue' fuera de bucle")
+    log_info("continue statement")
 
 
 # -----------ENUM -------------
@@ -636,7 +710,12 @@ def p_async_function(p):
 # ----------- While -------------
 def p_controlEstructure_while(p):
     'controlEstructure : WHILE LPAREN expression RPAREN statement'
+    context_stack.append("loop")
+    p[0] = p[5]
+    context_stack.pop()
     log_info("while structure")
+
+
 
 
 
@@ -701,10 +780,11 @@ else:
 
 
 def run_parser(file_path, username):
-    global error_log, success_log, semantic_errors, symbol_table, vars_con_error
+    global error_log, success_log, semantic_errors, symbol_table, vars_con_error, context_stack
     error_log = []
     success_log = []
     semantic_errors = []
+    context_stack = []
     symbol_table = {}
     vars_con_error = set()
 
