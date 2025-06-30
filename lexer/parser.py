@@ -12,6 +12,11 @@ def log_info(msg):
     print(f"✔ {msg}")
     success_log.append(f"✔ {msg}")
 
+def log_error(msg):
+    print(f"✖ {msg}")
+    semantic_errors.append(f"✖ {msg}")
+
+
 # ----------- First Rule (ROOT) -------------
 def p_program(p):
     '''program : program element
@@ -43,8 +48,14 @@ def p_assignment(p):
 
 
 # ----------- Symbol Table -------------
-symbol_table = {}
+symbol_table = {
+    "consts": {},
+    "classes": {},
+    "enums": {},
+    "functions": {}
+}
 semantic_errors = []
+
 
 
 #----------Compatibilty functions for semantic analysis-------------
@@ -509,19 +520,38 @@ def p_error(p):
 
 # ----------- Roberto Barrios -------------
 # ----------- CONST ASSIGNMENT -------------
+
 def p_constAssignment(p):
     'constAssignment : CONST IDENTIFIER COLON type EQUAL expression SEMICOLON'
-    log_info(f"const assignment (typed): {p[2]}")
+    var_name = p[2]
+    if var_name in symbol_table["consts"]:
+        log_error(f"Error: constante '{var_name}' ya fue declarada previamente.")
+    else:
+        symbol_table["consts"][var_name] = {"type": p[4], "value": p[6]}
+    log_info(f"const assignment (typed): {var_name}")
+
 
 def p_constAssignment_no_type(p):
     'constAssignment : CONST IDENTIFIER EQUAL expression SEMICOLON'
-    log_info(f"const assignment: {p[2]}")
+    var_name = p[2]
+    if var_name in symbol_table["consts"]:
+        log_error(f"Error: constante '{var_name}' ya fue declarada previamente.")
+    else:
+        symbol_table["consts"][var_name] = {"value": p[4]}
+    log_info(f"const assignment: {var_name}")
+
 
 
 # ----------- CLASS WITH CONSTRUCTOR -------------
 def p_class_definition(p):
     'class_definition : CLASS IDENTIFIER LBRACE class_body RBRACE'
-    log_info(f"class definition: {p[2]}")
+    class_name = p[2]
+    if class_name in symbol_table["classes"]:
+        log_error(f"Error: clase '{class_name}' ya existe.")
+    else:
+        symbol_table["classes"][class_name] = {}
+    log_info(f"class definition: {class_name}")
+
 
 def p_class_body(p):
     '''class_body : class_body class_element
@@ -557,18 +587,43 @@ def p_case(p):
 # -----------ENUM -------------
 def p_enum_definition(p):
     'enum_definition : ENUM IDENTIFIER LBRACE enum_members RBRACE'
-    log_info(f"enum: {p[2]}")
+    enum_name = p[2]
+    members = p[4]
+
+    if enum_name in symbol_table["enums"]:
+        log_error(f"Error: enum '{enum_name}' ya fue declarado.")
+    elif len(members) != len(set(members)):
+        log_error(f"Error: enum '{enum_name}' tiene miembros duplicados.")
+    else:
+        symbol_table["enums"][enum_name] = members
+    log_info(f"enum: {enum_name}")
+
 
 def p_enum_members(p):
     '''enum_members : IDENTIFIER
                     | IDENTIFIER COMMA enum_members'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1]] + p[3]
+    
+    # Validación semántica
+    if len(set(p[0])) != len(p[0]):
+        log_error("Error: miembros duplicados en definición de enum.")
     log_info("enum members")
+
     
     
 # ----------- ASYNC function -------------
 def p_async_function(p):
     'async_function : ASYNC FUNCTION IDENTIFIER LPAREN parameters RPAREN COLON type LBRACE body_function RBRACE'
-    log_info(f"async function: {p[3]}")
+    fname = p[3]
+    if fname in symbol_table["functions"]:
+        log_error(f"Error: función '{fname}' ya existe.")
+    else:
+        symbol_table["functions"][fname] = {"async": True, "returnType": p[8]}
+    log_info(f"async function: {fname}")
+
     
     
     
