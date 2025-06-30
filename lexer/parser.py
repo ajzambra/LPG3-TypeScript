@@ -125,6 +125,14 @@ def p_pop_loop(p):
     'pop_loop :'
     context_stack.pop()
 
+def p_push_switch(p):
+    'push_switch :'
+    context_stack.append("switch")
+
+def p_pop_switch(p):
+    'pop_switch :'
+    context_stack.pop()
+
 # ----------- For -------------
 
 def p_forEstructure(p):
@@ -622,22 +630,41 @@ def p_class_element(p):
     log_info("class element")
 
 
-# ----------- SWITCH ------------
+# —————— Switch ——————
 def p_controlEstructure_switch(p):
-    'controlEstructure : SWITCH LPAREN expression RPAREN LBRACE case_block RBRACE'
-    context_stack.append("switch")
+    'controlEstructure : SWITCH LPAREN expression RPAREN LBRACE push_switch case_list pop_switch RBRACE'
+    # p[7] es la lista de casos
+    p[0] = p[7]
     log_info("switch structure")
-    context_stack.pop()
 
-def p_case_block(p):
-    '''case_block : case_block case
-                  | case
-                  | empty'''
-    log_info("case block")
 
+# —————— Lista de casos ——————
+def p_case_list(p):
+    '''case_list : case_list case
+                 | case
+                 | empty'''
+    if len(p) == 3:
+        # concatenamos listas
+        p[0] = p[1] + [p[2]]
+    elif p[1] is None:
+        # empty ⇒ sin casos
+        p[0] = []
+    else:
+        # un único case
+        p[0] = [p[1]]
+    log_info("case list")
+
+
+# —————— Caso individual ——————
 def p_case(p):
     '''case : CASE expression COLON instruction_list
             | DEFAULT COLON instruction_list'''
+    if p[1] == 'case':
+        # guardamos (etiqueta, expresión, lista de instrucciones)
+        p[0] = ('case', p[2], p[4])
+    else:
+        # DEFAULT no lleva expresión
+        p[0] = ('default', p[3])
     log_info("case")
 
 
@@ -709,11 +736,10 @@ def p_async_function(p):
     
 # ----------- While -------------
 def p_controlEstructure_while(p):
-    'controlEstructure : WHILE LPAREN expression RPAREN statement'
-    context_stack.append("loop")
-    p[0] = p[5]
-    context_stack.pop()
+    'controlEstructure : WHILE LPAREN expression RPAREN push_loop statement pop_loop'
+    p[0] = p[6]
     log_info("while structure")
+
 
 
 
