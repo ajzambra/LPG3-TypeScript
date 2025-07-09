@@ -1,6 +1,7 @@
-from lexer.lexer import tokens, reserved
+from lexer import tokens, reserved
 import ply.yacc as yacc
 import datetime
+from lexer import brace_stack, lexical_errors
 
 # ----------- Logs -------------
 success_log = []
@@ -143,7 +144,6 @@ def p_function(p):
     symbol_table[func_name] = {
         "type": "function",
         "return_type": return_type,
-        # Aquí puedes guardar también los tipos de parámetros si lo necesitas
     }
     log_info(f"function declaration: {func_name} retorna {return_type}")
 
@@ -652,6 +652,14 @@ def run_parser(file_path, username):
     semantic_errors = []
     symbol_table = {}
     vars_con_error = set()
+    
+    # 🔁 Reset de llaves y errores léxicos
+    brace_stack.clear()
+    lexical_errors.clear()
+    if brace_stack:
+        error_log.append("⚠ Error: hay llaves de apertura '{' sin su correspondiente cierre '}'")
+        
+
 
     with open(file_path, 'r', encoding='utf-8') as file:
         data = file.read()
@@ -701,6 +709,58 @@ def run_parser(file_path, username):
 
     
 
+def run_parser_string(data: str) -> str:
+    global error_log, success_log, semantic_errors, symbol_table, vars_con_error
+    error_log = []
+    success_log = []
+    semantic_errors = []
+    symbol_table = {}
+    vars_con_error = set()
+
+    
+    # 🔁 Reset de pila y errores léxicos
+    brace_stack.clear()
+    lexical_errors.clear()
+
+
+
+    parser.parse(data)
+
+
+    if brace_stack:
+        error_log.append("⚠ Error: hay llaves de apertura '{' sin su correspondiente cierre '}'")
+
+
+    output = "-------Resultados del análisis sintáctico:-----------\n\n"
+    if success_log:
+        output += "✔ Producciones reconocidas:\n"
+        output += "\n".join(success_log) + "\n\n"
+    if error_log:
+        output += "✘ Errores sintácticos:\n"
+        output += "\n".join(error_log) + "\n"
+    else:
+        output += "✔ Análisis sintáctico completado sin errores.\n\n"
+
+    output += "-------Resultados del análisis semántico:-----------\n\n"
+    if semantic_errors:
+        output += "✘ Errores semánticos:\n"
+        output += "\n".join(semantic_errors) + "\n\n"
+    else:
+        output += "✔ Análisis semántico completado sin errores.\n\n"
+
+    if symbol_table:
+        output += "✔ Variables declaradas correctamente:\n"
+        alguna = False
+        for var, tipo in symbol_table.items():
+            if var not in vars_con_error:
+                output += f"{var}: {tipo}\n"
+                alguna = True
+        if not alguna:
+            output += "Ninguna variable fue declarada correctamente.\n"
+    else:
+        output += "No se detectaron variables.\n"
+
+    return output
 
 
 

@@ -102,6 +102,9 @@ tokens += list(reserved.values())
 # Token regex rules go here...
 # e.g., t_PLUS = r'\+'
 
+brace_stack = []
+lexical_errors = []
+
 #Added by Leonardo Zambrano
 t_PLUS = r'\+'
 t_MINUS = r'-'
@@ -130,8 +133,8 @@ t_GT = r'>'
 t_LE = r'<='
 t_GE = r'>='
 t_COLON = r':'
-t_LBRACE = r'\{'
-t_RBRACE = r'\}'
+#t_LBRACE = r'\{'
+#t_RBRACE = r'\}'
 t_ignore = ' \t\r'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
@@ -139,6 +142,18 @@ t_DOT = r'\.'
 t_PLUSPLUS = r'\+\+'
 t_MINUSMINUS = r'--'
 
+def t_LBRACE(t):
+    r'\{'
+    brace_stack.append('{')
+    return t
+
+def t_RBRACE(t):
+    r'\}'
+    if brace_stack:
+        brace_stack.pop()
+    else:
+        lexical_errors.append(f"✘ Línea {t.lineno}: llave de cierre inesperada '}}'")
+    return t
 
 #Added by Roberto Barrios
 t_AND = r'&&'
@@ -174,7 +189,18 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
 
 def t_error(t):
-    print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
+    char = t.value[0]
+    msg = f"✘ Línea {t.lineno}: carácter ilegal '{char}'"
+
+    # Sugerencia adicional
+    if char == '#':
+        msg += " ← los comentarios en TypeScript se escriben con '//' o '/* */'"
+    elif char == '¿':
+        msg += " ← este carácter no es válido en código, probablemente es parte de una pregunta mal copiada"
+    elif char == '$':
+        msg += " ← los identificadores no deben comenzar con '$', a menos que esté definido como token"
+
+    lexical_errors.append(msg)
     t.lexer.skip(1)
 
 
@@ -212,3 +238,14 @@ def run_lexer(file_path, username):
                 line = f"{tok.type}({tok.value}) at line {tok.lineno}\n"
                 log.write(line)
                 print(line.strip())
+
+
+def run_lexer_string(data: str) -> str:
+    lexer.input(data)
+    output = ""
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break
+        output += f"{tok.type}({tok.value}) at line {tok.lineno}\n"
+    return output
