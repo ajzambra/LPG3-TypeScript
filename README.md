@@ -2,7 +2,7 @@
 
 Este proyecto implementa un **analizador léxico** para el lenguaje **TypeScript**, utilizando **Python** y la librería **PLY (Python Lex-Yacc)**.
 
-El sistema permite identificar tokens válidos (palabras clave, operadores, tipos, identificadores, literales, etc.) y reportar errores léxicos.
+El sistema permite identificar tokens válidos (palabras clave, operadores, tipos, identificadores, literales, etc.) y reportar errores léxicos en el programa.
 
 
 ## 📁 Estructura del Proyecto
