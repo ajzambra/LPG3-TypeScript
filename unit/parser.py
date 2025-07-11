@@ -459,6 +459,13 @@ def p_expression_dot_identifier(p):
     'expression : expression DOT IDENTIFIER'
     log_info("expression")
 
+    # Soportar arreglo.length como tipo number
+    if p[3] == "length":
+        p[0] = "number"
+    else:
+        p[0] = "undefined"
+
+
 def p_expression_bracket(p):
     'expression : expression LBRACKET expression RBRACKET'
     log_info("expression")

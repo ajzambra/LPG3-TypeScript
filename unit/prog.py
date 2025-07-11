@@ -32,14 +32,14 @@ def limpiar_consola():
 
 # Texto de bienvenida personalizado
 bienvenida_texto = (
-    "Welcome to the TypeScript Analyzer\n"
-    "Where you can learn about lexic, sintaxis, semantic and test grammars!\n"
-    "Just hit the Run button to try out the sample grammar.\n\n"
+    "Bienvenido al analizador de Typescript\n"
+    "Donde puedes aprender acerca de analizador lexico, sintactico y semántico !\n"
+    "Solo clickea el Run button para porbar nuestro analizador.\n\n"
 )
 
 # Ventana principal
-ventana = tk.Tk()
-ventana.title("Analizador TypeScript - Simulación")
+ventana = tk.Tk() 
+ventana.title("Analizador TypeScript - GRUPO 3 ")
 ventana.geometry("1100x600")
 ventana.configure(bg="gray")
 
