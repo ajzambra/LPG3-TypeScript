@@ -46,6 +46,13 @@ python run_parser.py tests/archivo.ts usuarioGit
 archivo.ts por el nombre del archivo que quieres analizar.
 usuarioGit por tu nombre o nombre de usuario de GitHub.
 
+### Librerías de Python necesarias
+
+Para ejecutar este proyecto, asegúrate de tener instaladas las siguientes bibliotecas:
+
+- [`ply`](https://pypi.org/project/ply/): para el análisis léxico y sintáctico.
+- `tkinter`: incluida por defecto en la mayoría de instalaciones de Python.
+
 ## 👥 Integrantes
 
 
