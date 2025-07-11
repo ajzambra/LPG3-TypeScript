@@ -16,9 +16,8 @@ El sistema permite identificar tokens válidos (palabras clave, operadores, tipo
 │                                Recibe un archivo .ts y un nombre de usuario como argumento.
 ├── run_parser.py              <- Script principal que ejecuta el analizador sintactico desde consola.
 │                                Recibe un archivo .ts y un nombre de usuario como argumento.
-│
-├── logs/                     <- Carpeta donde se generan los logs (.txt) de cada análisis.
-│   └── lexer-[usuario]-[fecha]-[hora].txt  <- Archivo con el resultado del análisis léxico.
+├── prog.py                   <- Archivo para cargar la interfaz gráfica para la prueba de los analizadores.
+│                               El usuario escirbe en el editor del código y clickea el botón.
 │
 ├── tests/                    <- Archivos de prueba escritos en TypeScript (.ts)
 │   ├── leozam02.ts         <- Algoritmo de Leonardo Zambrano
@@ -46,7 +45,7 @@ python run_parser.py tests/archivo.ts usuarioGit
 archivo.ts por el nombre del archivo que quieres analizar.
 usuarioGit por tu nombre o nombre de usuario de GitHub.
 
-### Librerías de Python necesarias
+## Librerías de Python necesarias
 
 Para ejecutar este proyecto, asegúrate de tener instaladas las siguientes bibliotecas:
 
