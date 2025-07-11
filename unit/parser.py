@@ -101,7 +101,15 @@ def p_letAssignment_declaration_only(p):
     symbol_table[var] = declared_type
     log_info(f"letAssignment (declaración sin valor): {var}")
 
+# ----------- Var - Const-------------
+def p_varAssignment(p):
+    'varAssignment : VAR IDENTIFIER COLON type EQUAL expression SEMICOLON'
+    log_info(f"varAssignment: {p[2]}")
 
+def p_varAssignment_no_type(p):
+    'varAssignment : VAR IDENTIFIER EQUAL expression SEMICOLON'
+    log_info(f"varAssignment (no type): {p[2]}")
+    
 # ----------- Array Assignment -------------
 def p_declaracion(p):
     '''declaracion : LET IDENTIFIER COLON type LBRACKET RBRACKET EQUAL LBRACKET lista_expresiones_opt RBRACKET SEMICOLON'''
@@ -753,14 +761,7 @@ def p_controlEstructure_while(p):
 
 
 
-# ----------- Var - Const-------------
-def p_varAssignment(p):
-    'varAssignment : VAR IDENTIFIER COLON type EQUAL expression SEMICOLON'
-    log_info(f"varAssignment: {p[2]}")
 
-def p_varAssignment_no_type(p):
-    'varAssignment : VAR IDENTIFIER EQUAL expression SEMICOLON'
-    log_info(f"varAssignment (no type): {p[2]}")
 
 # ----------- Arrow Function -------------
 def p_arrow_function(p):
